@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const QueueManager = require('./queue');
+const kiosk = require('./model/kioskSchema');
+require('./config');
 
 // Load environment variables from .env file
 dotenv.config();
@@ -57,6 +59,42 @@ app.delete('/kiosk/:id/remove-customer/:customerId', (req, res) => {
   const customerId = req.params.customerId;
   const updatedQueue = QueueManager.removeCustomerById(kioskId, customerId);
   res.json({ message: `Customer with ID ${customerId} removed`, queue: updatedQueue });
+});
+
+// to add the kiosks in the database
+app.post('/kiosk', (req, res) => {
+  const data = req.body;
+  const newKiosk = new kiosk(data);
+  newKiosk.save()
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((err) => {
+      res.status(400).json({ message: 'Error adding kiosk', error: err });
+    });
+});
+
+// to get all the kiosks from the database 
+app.get('/kiosk', (req, res) => {
+  kiosk.find()
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((err) => {
+      res.status(400).json({ message: 'Error getting kiosks', error: err });
+    });
+});
+
+// to get a kiosk by id
+app.get('/kiosk/:id', (req, res) => {
+  const id = req.params.id;
+  kiosk.findById(id)
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((err) => {
+      res.status(400).json({ message: 'Error getting kiosk', error: err });
+    });
 });
 
 app.listen(PORT, () => {
