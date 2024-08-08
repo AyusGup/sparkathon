@@ -11,7 +11,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/book-slot/:code" element={<BookingPage />} />
-        <Route path="/kiosk-details" element={<KioskDetails />} />
+        <Route path="/kiosk-details/:kioskId" element={<KioskDetails />} />
         <Route path="/admin" element={<AdminPage />} /> {/* Add route for AdminPage */}
       </Routes>
     </Router>
