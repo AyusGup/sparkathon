@@ -1,0 +1,9 @@
+/* QRCodeScanner.css */
+.qr-scanner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
