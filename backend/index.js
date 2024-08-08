@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const QueueManager = require('./queue');
 const kiosk = require('./model/kioskSchema');
+const cors = require('cors');
 require('./config');
 
 // Load environment variables from .env file
@@ -10,9 +11,17 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const corsOptions = {
+  origin: '*', // Replace with your frontend's URL
+  methods: 'GET,POST,PUT,DELETE', // Allowed methods
+  allowedHeaders: 'Content-Type,Authorization', // Allowed headers
+  credentials: true, // Enable cookies
+};
 
-// Middleware to parse JSON bodies
+// Middlewares
+app.use(cors());
 app.use(bodyParser.json());
+app.use(cors(corsOptions));
 
 // Middleware to ensure the queue exists for a kiosk
 app.use('/kiosk/:id', (req, res, next) => {
@@ -25,6 +34,7 @@ app.use('/kiosk/:id', (req, res, next) => {
 app.post('/kiosk/:id/add-customer', (req, res) => {
   const kioskId = req.params.id;
   const ticket = QueueManager.addCustomer(kioskId);
+  ticket.kioskId = kioskId;
   res.json(ticket);
 });
 
@@ -100,3 +110,4 @@ app.get('/kiosk/:id', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
