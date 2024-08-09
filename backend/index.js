@@ -38,6 +38,7 @@ const emitTop10Customers = (kioskId) => {
   top10.forEach(customer => {
     const socket = customerSockets[customer.id];
     if (socket) {
+      console.log('emitting to socket', socket.id);
       socket.emit('update-top-10', { kioskId, top10 });
     }
   });
@@ -46,10 +47,16 @@ const emitTop10Customers = (kioskId) => {
 io.on('connection', (socket) => {
   console.log(`a user connected ${socket.id}`);
   
-  socket.on('register-customer', (customerId) => {
-    console.log(`Customer ${customerId} registered`);
-    customerSockets[customerId] = socket;
+  socket.on('add-customer', (code) => {
+    const kioskId = code;
+    QueueManager.createQueue(kioskId);
+    const ticket = QueueManager.addCustomer(kioskId);
+    ticket.kioskId = kioskId;
+    customerSockets[ticket.id] = socket;
+    socket.emit('registered-customer', ticket);
+    emitTop10Customers(kioskId);
   });
+ 
 
   // Remove the socket connection when the customer disconnects
   socket.on('disconnect', () => {
@@ -68,11 +75,10 @@ app.use(bodyParser.json());
 app.use(cors(corsOptions));
 
 // Middleware to ensure the queue exists for a kiosk
-app.use('/kiosk/:id', (req, res, next) => {
-  const kioskId = req.params.id;
-  QueueManager.createQueue(kioskId);
-  next();
-});
+// app.use('/kiosk/:id', (req, res, next) => {
+  
+//   next();
+// });
 
 // Add a customer to the queue
 app.post('/kiosk/:id/add-customer', (req, res) => {
@@ -81,7 +87,7 @@ app.post('/kiosk/:id/add-customer', (req, res) => {
   ticket.kioskId = kioskId;
   console.log('ticket', ticket);
   res.json(ticket);
-  emitTop10Customers(kioskId);
+  
 });
 
 // Get the next customer in the queue
@@ -117,8 +123,10 @@ app.delete('/kiosk/:id/remove-customer/:customerId', (req, res) => {
   const kioskId = req.params.id;
   const customerId = req.params.customerId;
   const updatedQueue = QueueManager.removeCustomerById(kioskId, customerId);
-  res.json({ message: `Customer with ID ${customerId} removed`, queue: updatedQueue });
+  res.json(updatedQueue );
   emitTop10Customers(kioskId);
+  const socket = customerSockets[customerId];
+  socket.emit('customer-removed', { message: 'You have been removed from the queue' });
 });
 
 // to add the kiosks in the database

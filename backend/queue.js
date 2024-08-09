@@ -14,6 +14,7 @@ class QueueManager {
 
   // Add a customer to the queue
   addCustomer(kioskId) {
+    console.log('kioskId', kioskId);
     const ticket = {
       id: uuidv4(),
       addedAt: Date.now(),

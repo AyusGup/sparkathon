@@ -26,13 +26,17 @@ const KioskDetails = () => {
         // Step 4: Save the data in state
         setCustomerData(parsedData);
         if(socket){
+          console.log('i am here',socket);
           socket.on('update-top-10', ({ kioskId, top10 }) => {
-            console.log('Received updated top 10: i got the alert',);
-
+            console.log('Received updated top 10: i got the alert');
             setAlert(true);
+          });
+          socket.on('customer-removed',()=>{
+            setRejoin(true);
           });
           return () => {
             socket.off('update-top-10');
+            socket.off('customer-removed');
           };
         }
         
@@ -87,16 +91,22 @@ const KioskDetails = () => {
   };
 
   const handleSubmit = () => {
-    axios.post(`http://localhost:8000/kiosk/${customerData.kioskId}/add-customer`)
-      .then((response) => {
-        socket.emit('register-customer', response.data.id);
-        setCustomerData(response.data);
-        setRejoin(false);
-      })
-      .catch((error) => {
-        console.error("An error occurred:", error);
-        // Handle the error as needed, e.g., showing a message to the user
-      });
+    socket.emit('add-customer',customerData.kioskId);
+    socket.on('registered-customer', (ticket) => {
+      let ti = encodeURIComponent(JSON.stringify(ticket));
+      setCustomerData(ticket);
+      setRejoin(false);
+      navigate(`/kiosk-details/${ti}`);
+    });
+    // axios.post(`http://localhost:8000/kiosk/${customerData.kioskId}/add-customer`)
+    //   .then((response) => {
+    //     socket.emit('register-customer', response.data.id);
+        
+    //   })
+    //   .catch((error) => {
+    //     console.error("An error occurred:", error);
+    //     // Handle the error as needed, e.g., showing a message to the user
+    //   });
   };  
 
   return (
