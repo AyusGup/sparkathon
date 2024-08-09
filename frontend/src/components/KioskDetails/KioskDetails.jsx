@@ -1,16 +1,18 @@
 import {useState, useEffect} from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useSocket } from '../../context/socketContext';
 import axios from 'axios';
 import './KioskDetails.css'; // Ensure this CSS file is created
 
 const KioskDetails = () => {
   const { kioskId } = useParams();
   const navigate = useNavigate();
+  const socket = useSocket();
   const [customerData, setCustomerData] = useState(null);
   const [timeLeft, setTimeLeft] = useState('05:00'); // Initial state for 5 minutes
   const [isActive, setIsActive] = useState(false); // State to control timer start
   const [isRejoin, setRejoin] = useState(false);
-
+  const [alert, setAlert] = useState(false);
 
   useEffect(() => {
     if (kioskId) {
@@ -23,11 +25,26 @@ const KioskDetails = () => {
         
         // Step 4: Save the data in state
         setCustomerData(parsedData);
-      } catch (error) {
+        if(socket){
+          console.log('i am here',socket);
+          socket.on('update-top-10', ({ kioskId, top10 }) => {
+            console.log('Received updated top 10: i got the alert');
+            setAlert(true);
+          });
+          socket.on('customer-removed',()=>{
+            setRejoin(true);
+          });
+          return () => {
+            socket.off('update-top-10');
+            socket.off('customer-removed');
+          };
+        }
+        
+        } catch (error) {
         console.error('Failed to decode and parse ticket:', error);
       }
     }
-  }, [kioskId]);
+  }, [socket,kioskId]);
 
   useEffect(() => {
     let timerInterval;
@@ -74,15 +91,22 @@ const KioskDetails = () => {
   };
 
   const handleSubmit = () => {
-    axios.post(`http://localhost:8080/kiosk/${customerData.kioskId}/add-customer`)
-      .then((response) => {
-        setCustomerData(response.data);
-        setRejoin(false);
-      })
-      .catch((error) => {
-        console.error("An error occurred:", error);
-        // Handle the error as needed, e.g., showing a message to the user
-      });
+    socket.emit('add-customer',customerData.kioskId);
+    socket.on('registered-customer', (ticket) => {
+      let ti = encodeURIComponent(JSON.stringify(ticket));
+      setCustomerData(ticket);
+      setRejoin(false);
+      navigate(`/kiosk-details/${ti}`);
+    });
+    // axios.post(`http://localhost:8000/kiosk/${customerData.kioskId}/add-customer`)
+    //   .then((response) => {
+    //     socket.emit('register-customer', response.data.id);
+        
+    //   })
+    //   .catch((error) => {
+    //     console.error("An error occurred:", error);
+    //     // Handle the error as needed, e.g., showing a message to the user
+    //   });
   };  
 
   return (

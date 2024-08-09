@@ -4,17 +4,20 @@ import MainPage from './components/MainPage/MainPage';
 import BookingPage from './components/BookingPage/BookingPage';
 import KioskDetails from './components/KioskDetails/KioskDetails';
 import AdminPage from './components/AdminPage/AdminPage';
+import { SocketProvider } from './context/socketContext';
 
 const App = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/book-slot/:code" element={<BookingPage />} />
-        <Route path="/kiosk-details/:kioskId" element={<KioskDetails />} />
-        <Route path="/admin" element={<AdminPage />} /> {/* Add route for AdminPage */}
-      </Routes>
-    </Router>
+    <SocketProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route path="/book-slot/:code" element={<BookingPage />} />
+          <Route path="/kiosk-details/:kioskId" element={<KioskDetails />} />
+          <Route path="/admin" element={<AdminPage />} /> {/* Add route for AdminPage */}
+        </Routes>
+      </Router>
+    </SocketProvider>
   );
 };
 
