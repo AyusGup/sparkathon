@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSocket } from '../../context/socketContext';
 import './MainPage.css'; 
 import axios from 'axios';
 
 const MainPage = () => {
   const [code, setCode] = useState('');
   const navigate = useNavigate();
+  const socket = useSocket();
 
   const handleCodeSubmit = () => {
-    axios.post(`http://localhost:8080/kiosk/${code}/add-customer`)
+    axios.post(`http://localhost:8000/kiosk/${code}/add-customer`)
       .then((response) => {
         // Convert the entire response data to a JSON string and encode it for the URL
         let ticket = encodeURIComponent(JSON.stringify(response.data));
+        socket.emit('register-customer', response.data.id);
         navigate(`/kiosk-details/${ticket}`);
       })
       .catch((error) => {
