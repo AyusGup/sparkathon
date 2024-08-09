@@ -54,4 +54,11 @@
   .remove-button:hover {
     background-color: #c82333;
   }
+
+  .submit-button{
+    margin-left: 20px;
+    background-color: #ebc1c5;
+    font-size: 1.2rem;
+    padding: 4px;
+  }
   
