@@ -29,8 +29,7 @@ const MainPage = () => {
   };  
 
   return (
-    <div className="main-page">
-      <h1>QR Code Scanner or Enter Code</h1>
+    <div className="main-page main-background">
       <input
         type="text"
         value={code}
@@ -40,6 +39,7 @@ const MainPage = () => {
       <button onClick={handleCodeSubmit} className="submit-button">
         Submit Code
       </button>
+      <h1 className='text-background'>OR</h1>
       <button onClick={() => navigate('/scan-qr-code')} className="scan-button">
         Scan QR Code
       </button>

@@ -18,7 +18,7 @@ class QueueManager {
     const ticket = {
       id: uuidv4(),
       addedAt: Date.now(),
-      expiresAt: Date.now() + 5 * 60 * 1000 // 5 minutes buffer time
+      expiresAt: Date.now() + 1 * 60 * 1000 // 5 minutes buffer time
     };
     this.queues[kioskId].push(ticket);
     return ticket;
