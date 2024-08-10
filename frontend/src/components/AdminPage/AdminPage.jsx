@@ -38,7 +38,7 @@ const AdminPage = () => {
         placeholder="Enter Code"
       />
       <button onClick={handleCodeSubmit} className="submit-button">
-        Submit Code
+        Search the ID 
       </button>
       <div className="kiosk-list">
         {kiosks.map(kiosk => (
