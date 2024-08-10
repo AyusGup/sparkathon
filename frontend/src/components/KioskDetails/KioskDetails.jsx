@@ -79,7 +79,7 @@ const KioskDetails = () => {
       });
   
       // Set the expiration time to 5 minutes from now
-      const newExpirationTime = new Date(Date.now() + 5 * 60 * 1000).toISOString();
+      const newExpirationTime = new Date(Date.now() + 1 * 60 * 1000).toISOString();
   
       // Update the customer data with the new expiration time
       const updatedTicket = {
@@ -106,7 +106,11 @@ const KioskDetails = () => {
   
 
   return (
-    <div className="kiosk-details-container">
+    <>
+    <div className="navbar">
+                Thanks for ordering!
+    </div>
+    <div className="kiosk-details-container kiosk-background">
       {customerData ? (
         showRejoinButton ? (
           <div>
@@ -129,6 +133,7 @@ const KioskDetails = () => {
         <p>Loading...</p>
       )}
     </div>
+    </>
   );
 };
 

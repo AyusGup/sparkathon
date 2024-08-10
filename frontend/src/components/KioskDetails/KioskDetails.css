@@ -1,4 +1,24 @@
 /* KioskDetails.css */
+.kiosk-background{
+  background: linear-gradient(135deg, #FFB347, #FFCC33); /* Warm gradient background */
+  background-size: cover;
+  color: #333; /* Default text color */
+}
+
+/*navbar at the top*/
+.navbar {
+  width: 100%;
+  background-color: #333; /* Dark background for contrast */
+  color: #fff; /* White text color */
+  padding: 15px 0;
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: bold;
+  position: fixed; /* Sticks to the top of the page */
+  top: 0;
+  z-index: 10;
+}
+ 
 
 .kiosk-details-container {
     display: flex;

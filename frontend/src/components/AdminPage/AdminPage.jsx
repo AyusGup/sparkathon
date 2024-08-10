@@ -36,6 +36,7 @@ const AdminPage = () => {
         value={code}
         onChange={(e) => setCode(e.target.value)}
         placeholder="Enter Code"
+        className="search-container search-input"
       />
       <button onClick={handleCodeSubmit} className="submit-button">
         Search the ID 
