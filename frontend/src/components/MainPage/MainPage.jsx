@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSocket } from '../../context/socketContext';
 import './MainPage.css'; 
-import axios from 'axios';
 
 const MainPage = () => {
   const [code, setCode] = useState('');
@@ -27,7 +26,6 @@ const MainPage = () => {
     //     // Handle the error as needed, e.g., showing a message to the user
     //   });
   };  
-
   return (
     <div className="main-page main-background">
       <input

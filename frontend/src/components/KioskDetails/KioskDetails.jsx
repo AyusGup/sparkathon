@@ -10,6 +10,7 @@ const KioskDetails = () => {
   const [customerData, setCustomerData] = useState(null);
   const [timeLeft, setTimeLeft] = useState('');
   const [showRejoinButton, setShowRejoinButton] = useState(false); // State to control rejoin button visibility
+  const [alert, setAlert] = useState(false);
 
   useEffect(() => {
     if (kioskId) {
@@ -22,7 +23,7 @@ const KioskDetails = () => {
           console.log('Socket connected:', socket);
           socket.on('update-top-10', ({ kioskId, top10 }) => {
             console.log('Received updated top 10: alert triggered');
-            // Optional: You can handle alerts if needed
+            setAlert(true);
           });
 
           socket.on('customer-removed', () => {
@@ -40,33 +41,33 @@ const KioskDetails = () => {
     }
   }, [socket, kioskId]);
 
-  useEffect(() => {
-    let timerInterval;
-    if (customerData) {
-      const updateTimeLeft = () => {
-        const now = Date.now();
-        const expiresAt = new Date(customerData.expiresAt).getTime();
-        const timeRemaining = expiresAt - now;
+  // useEffect(() => {
+  //   let timerInterval;
+  //   if (customerData) {
+  //     const updateTimeLeft = () => {
+  //       const now = Date.now();
+  //       const expiresAt = new Date(customerData.expiresAt).getTime();
+  //       const timeRemaining = expiresAt - now;
 
-        if (timeRemaining <= 0) {
-          clearInterval(timerInterval);
-          setTimeLeft('00:00');
-          setShowRejoinButton(true); // Show the rejoin button when time is up
-          return;
-        }
+  //       if (timeRemaining <= 0) {
+  //         clearInterval(timerInterval);
+  //         setTimeLeft('00:00');
+  //         setShowRejoinButton(true); // Show the rejoin button when time is up
+  //         return;
+  //       }
 
-        const minutes = Math.floor((timeRemaining / (1000 * 60)) % 60).toString().padStart(2, '0');
-        const seconds = Math.floor((timeRemaining / 1000) % 60).toString().padStart(2, '0');
+  //       const minutes = Math.floor((timeRemaining / (1000 * 60)) % 60).toString().padStart(2, '0');
+  //       const seconds = Math.floor((timeRemaining / 1000) % 60).toString().padStart(2, '0');
         
-        setTimeLeft(`${minutes}:${seconds}`);
-      };
+  //       setTimeLeft(`${minutes}:${seconds}`);
+  //     };
 
-      updateTimeLeft();
-      timerInterval = setInterval(updateTimeLeft, 1000);
+  //     updateTimeLeft();
+  //     timerInterval = setInterval(updateTimeLeft, 1000);
 
-      return () => clearInterval(timerInterval);
-    }
-  }, [customerData]);
+  //     return () => clearInterval(timerInterval);
+  //   }
+  // }, [customerData]);
 
   const handleRejoin = async () => {
     try {
@@ -124,9 +125,9 @@ const KioskDetails = () => {
             <h1>Your Details</h1>
             <p>Token No: {customerData.id}</p>
             <p>Expected Service Time: {new Date(customerData.expiresAt).toLocaleTimeString()}</p>
-            <div>
-              <h1>Reach the Counter in {timeLeft}</h1>
-            </div>
+            {alert? <div>
+              <h1>Reach to Billing Counter !!!</h1>
+            </div> : <></>}
           </div>
         )
       ) : (
