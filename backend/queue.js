@@ -1,4 +1,7 @@
-const { v4: uuidv4 } = require('uuid');
+const { customAlphabet } = require('nanoid');
+
+// Create a custom alphabet for numeric IDs (e.g., digits 0-9)
+const generateNumericID = customAlphabet('0123456789', 5);
 
 class QueueManager {
   constructor() {
@@ -14,25 +17,26 @@ class QueueManager {
 
   // Add a customer to the queue
   addCustomer(kioskId) {
-    console.log('kioskId', kioskId);
+    const queueLength = this.queues[kioskId] ? this.queues[kioskId].length : 0;
+    const bufferTimePerCustomer = 2 * 60 * 1000; // 2 minutes buffer time per customer
+    const totalBufferTime = queueLength * bufferTimePerCustomer; // Total buffer time based on queue length
+    
     const ticket = {
-      id: uuidv4(),
+      id: generateNumericID(),
       addedAt: Date.now(),
-      expiresAt: Date.now() + 1 * 60 * 1000 // 5 minutes buffer time
+      expiresAt: Date.now() + totalBufferTime // Expiration time calculated based on queue length
     };
+    
+    if (!this.queues[kioskId]) {
+      this.queues[kioskId] = []; // Initialize queue if it doesn't exist
+    }
+    
     this.queues[kioskId].push(ticket);
     return ticket;
-  }
-
-  // Remove expired tickets from the queue
-  removeExpiredTickets(kioskId) {
-    const now = Date.now();
-    this.queues[kioskId] = this.queues[kioskId].filter(ticket => ticket.expiresAt > now);
-  }
+  }  
 
   // Get the first 10 tickets in the queue
   getFirst10Tickets(kioskId) {
-    this.removeExpiredTickets(kioskId);
     return this.queues[kioskId].slice(0, 10);
   }
 

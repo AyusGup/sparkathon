@@ -5,7 +5,7 @@ const AdminPage = () => {
   const [kiosks, setKiosks] = useState([]);
   const [code, setCode] = useState('');
   const handleCodeSubmit = () => {
-    axios.get(`http://localhost:8000/kiosk/${code}/first-10-tickets`)
+    axios.get(`${process.env.REACT_APP_API_URL}kiosk/${code}/first-10-tickets`)
       .then((response) => {
         setKiosks(response.data);
       })
@@ -17,7 +17,7 @@ const AdminPage = () => {
   
 
   const handleRemoveToken = async (kioskId, tokenId) => {
-      axios.delete(`http://localhost:8000/kiosk/${kioskId}/remove-customer/${tokenId}`)
+      axios.delete(`${process.env.REACT_APP_API_URL}kiosk/${kioskId}/remove-customer/${tokenId}`)
       .then((response) => {
         setKiosks(response.data);
       })
