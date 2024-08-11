@@ -1,9 +1,73 @@
 /* QRCodeScanner.css */
-.qr-scanner-container {
+
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Arial', sans-serif;
+}
+
+.qr-scanner-page {
+  height: 100vh;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  background-size: 400% 400%;
+  animation: gradientAnimation 15s ease infinite;
+  color: rgb(239, 138, 138);
+  text-align: center;
+  transition: background 1s ease;
+}
+
+.qr-scanner-page.scanning {
+  background: radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(0,0,0,0.9) 60%, rgba(0,0,0,0.8) 100%);
+}
+
+@keyframes gradientAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+h1 {
+  font-size: 36px;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.qr-scanner-container {
+  background: rgba(255, 255, 255, 0.2);
   padding: 20px;
-  max-width: 600px;
-  margin: 0 auto;
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+.qr-scanner {
+  width: 300px;
+  margin: 20px auto;
+}
+
+.scan-button {
+  background-color: #ff7e5f;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.scan-button:hover {
+  background-color: #feb47b;
+}
+
+.scan-result {
+  font-weight: bold;
+  font-size: 18px;
+  margin-top: 20px;
+  color: #fff;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 }

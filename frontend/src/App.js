@@ -4,6 +4,7 @@ import MainPage from './components/MainPage/MainPage';
 import BookingPage from './components/BookingPage/BookingPage';
 import KioskDetails from './components/KioskDetails/KioskDetails';
 import AdminPage from './components/AdminPage/AdminPage';
+import QRCodeScanner from './components/QRCodeScanner/QRCodeScanner';
 import { SocketProvider } from './context/socketContext';
 
 const App = () => {
@@ -12,6 +13,7 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="/" element={<MainPage />} />
+          <Route path="/scan-qr-code" element={<QRCodeScanner/>}/>
           <Route path="/book-slot/:code" element={<BookingPage />} />
           <Route path="/kiosk-details/:kioskId" element={<KioskDetails />} />
           <Route path="/admin" element={<AdminPage />} /> {/* Add route for AdminPage */}
