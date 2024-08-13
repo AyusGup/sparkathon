@@ -4,7 +4,8 @@ import MainPage from './components/MainPage/MainPage';
 import BookingPage from './components/BookingPage/BookingPage';
 import KioskDetails from './components/KioskDetails/KioskDetails';
 import AdminPage from './components/AdminPage/AdminPage';
-import QRCodeScanner from './components/QRCodeScanner/QRCodeScanner';
+// import QRCodeScanner from './components/QRCodeScanner/QRCodeScanner';
+import QRCodeScanner from './components/QRCodeScanner/QrScan';
 import { SocketProvider } from './context/socketContext';
 
 const App = () => {
