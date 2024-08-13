@@ -14,17 +14,6 @@ const MainPage = () => {
       let ti = encodeURIComponent(JSON.stringify(ticket));
       navigate(`/kiosk-details/${ti}`);
     });
-    // axios.post(`http://localhost:8000/kiosk/${code}/add-customer`)
-    //   .then((response) => {
-    //     // Convert the entire response data to a JSON string and encode it for the URL
-    //     let ticket = encodeURIComponent(JSON.stringify(response.data));
-    //     socket.emit('register-customer', response.data.id);
-    //     navigate(`/kiosk-details/${ticket}`);
-    //   })
-    //   .catch((error) => {
-    //     console.error("An error occurred:", error);
-    //     // Handle the error as needed, e.g., showing a message to the user
-    //   });
   };  
   return (
     <div className="main-page main-background">

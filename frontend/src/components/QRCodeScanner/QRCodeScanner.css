@@ -20,6 +20,21 @@ body, html {
   transition: background 1s ease;
 }
 
+.toggle-camera-btn, .start-scanning-btn {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.toggle-camera-btn:hover, .start-scanning-btn:hover {
+  background-color: #0056b3;
+}
+
+
 .qr-scanner-page.scanning {
   background: radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(0,0,0,0.9) 60%, rgba(0,0,0,0.8) 100%);
 }
